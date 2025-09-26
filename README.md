@@ -62,16 +62,15 @@ poetry add --editable git+https://github.com/dennislwy/vision-engine.git
 
 ```python
 import cv2
-from vision_engine.frame_grabbers import SingleFrameGrabber
-from vision_engine.frame_grabbers.service import FrameGrabberService
+from vision_engine.frame_grabbers import (FrameGrabberService,
+                                          ManagedFrameGrabber)
 
 # Create frame grabber for webcam
-grabber = SingleFrameGrabber(source=0)
+grabber = ManagedFrameGrabber(source=0)
 
 # Create service with FPS limiting and monitoring
 service = FrameGrabberService(
     frame_grabber=grabber,
-    target_fps=30,
     calc_fps=True
 )
 
@@ -83,13 +82,13 @@ service.start()
 
 try:
     while True:
-        frame = service.get_frame("main", timeout=1.0)
+        frame = service.get_frame("main", timeout=0.1)
         if frame is not None:
             cv2.imshow("Video", frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
         
-        print(f"Current FPS: {service.get_fps():.2f}")
+        print(f"Current FPS: {service.get_fps():.1f}")
         
 finally:
     service.stop()
