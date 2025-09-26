@@ -1,0 +1,20 @@
+"""
+Vision Engine YOLO: A Python package for YOLO-based computer vision processing.
+
+This package provides a high-level interface for vision processing,
+with support for images, videos, and real-time processing.
+"""
+
+__version__ = "0.1.0"
+__author__ = "Dennis Lee"
+__email__ = "wylee2000@gmail.com"
+
+from .core.detector import YOLODetector
+from .core.engine import VisionEngine
+from .models.yolo_model import YOLOModel
+
+__all__ = [
+    "VisionEngine",
+    "YOLODetector", 
+    "YOLOModel",
+]
