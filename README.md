@@ -25,25 +25,29 @@ You can install Vision Engine directly from the GitHub repository using pip:
 # Install latest version from main branch
 pip install git+https://github.com/dennislwy/vision-engine.git
 
+# Install latest version from develop branch
+pip install git+https://github.com/dennislwy/vision-engine.git@develop
+
 # Install specific version/tag
 pip install git+https://github.com/dennislwy/vision-engine.git@v0.1.0
 
 # Install in development mode (editable)
 pip install -e git+https://github.com/dennislwy/vision-engine.git#egg=vision-engine
+
 ```
-
-### Install from Local Clone
-
+**Using Poetry:**
 ```bash
-# Clone the repository
-git clone https://github.com/dennislwy/vision-engine.git
-cd vision-engine
+# Install latest version from main branch
+poetry add git+https://github.com/dennislwy/vision-engine.git
 
-# Install in development mode
-pip install -e .
+# Install latest version from develop branch
+poetry add git+https://github.com/dennislwy/vision-engine.git@develop
 
-# Or install normally
-pip install .
+# Install specific version/tag
+poetry add git+https://github.com/dennislwy/vision-engine.git@v0.1.0
+
+# Install in development mode (editable)
+poetry add --editable git+https://github.com/dennislwy/vision-engine.git
 ```
 
 ### Requirements
