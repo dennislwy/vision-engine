@@ -1,3 +1,15 @@
+# video files
+*.mp4
+*.mov
+*.avi
+
+# model files
+*.pt
+*.onnx
+*_model/
+*.engine
+*.torchscript
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
