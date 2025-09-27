@@ -35,6 +35,8 @@ class ObjectDetectionService:
         _result_queue (queue.Queue): Output queue for detection results.
     """
 
+    FPS_CALC_WINDOW = 30  # Number of frames to average for FPS calculation
+
     def __init__(
         self,
         detection_queue: queue.Queue,
@@ -140,6 +142,14 @@ class ObjectDetectionService:
         """
         return self._running
 
+    def get_fps(self) -> float:
+        """Get current frames per second.
+
+        Returns:
+            Current FPS based on rolling average.
+        """
+        return self._last_fps
+    
     def _detection_loop(self) -> None:
         """Main loop for object detection processing.
 
@@ -179,6 +189,10 @@ class ObjectDetectionService:
 
                 # Add new result: (timestamp, original_frame, detection_results)
                 self._result_queue.put((timestamp, frame, results))
+
+            # Update performance metrics
+            if self._calc_fps:
+                self._calculate_fps()
 
     def get_latest_detection(
         self, timeout: Optional[float] = None
@@ -254,3 +268,14 @@ class ObjectDetectionService:
             # Queue is empty - this is normal during non-blocking calls
             # or when no frames arrive within the timeout per
             return None
+
+    def _calculate_fps(self) -> None:
+        """Update FPS calculation with current timestamp."""
+        self._fps_counter.append(time.time())
+
+        if len(self._fps_counter) > 3:
+            time_span = self._fps_counter[-1] - self._fps_counter[0]
+            if time_span > 0:
+                self._last_fps = len(self._fps_counter) / time_span
+            else:
+                print("Warning: Time span for FPS calculation is zero")

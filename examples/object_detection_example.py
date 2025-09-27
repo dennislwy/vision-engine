@@ -38,6 +38,18 @@ try:
                     frame, bboxes, class_ids, scores, detector.classes
                 )
 
+            # Display FPS on frame
+            fps = detection_service.get_fps()
+            cv2.putText(
+                frame,
+                f"FPS: {fps:.1f}",
+                (10, 30),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.5,
+                (0, 255, 0),
+                2,
+            )
+
             cv2.imshow("Video", frame)
             if cv2.waitKey(1) & 0xFF == ord("q"):
                 break
