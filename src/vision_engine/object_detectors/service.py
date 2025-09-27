@@ -2,6 +2,7 @@ import logging
 import queue
 import threading
 import time
+from collections import deque
 from typing import Optional, Tuple
 
 import numpy as np
@@ -33,6 +34,7 @@ class ObjectDetectionService:
         _detection_thread (Optional[threading.Thread]): Background detection thread.
         _result_queue_lock (threading.Lock): Lock for thread-safe result queue access.
         _result_queue (queue.Queue): Output queue for detection results.
+        _calc_fps (bool): Whether FPS calculation is enabled.
     """
 
     FPS_CALC_WINDOW = 30  # Number of frames to average for FPS calculation
@@ -42,6 +44,7 @@ class ObjectDetectionService:
         detection_queue: queue.Queue,
         object_detector: YOLOObjectDetector,
         buffer_size: int = 1,
+        calc_fps: bool = False,
     ) -> None:
         """Initialize the object detection service.
 
@@ -53,6 +56,8 @@ class ObjectDetectionService:
             buffer_size (int, optional): Maximum number of detection results to
                 buffer in the output queue. Defaults to 1. When full, oldest
                 results are discarded to prevent memory buildup.
+            calc_fps (bool): Enable FPS calculation (default: False). If enabled,
+                the service will maintain an FPS counter that can be queried.
 
         Note:
             The service starts in a stopped state. Call start() to begin processing.
@@ -71,6 +76,11 @@ class ObjectDetectionService:
         # Result queue management - stores detection results with thread safety
         self._result_queue_lock = threading.Lock()
         self._result_queue = queue.Queue(maxsize=buffer_size)
+
+        # Performance monitoring
+        self._calc_fps = calc_fps
+        self._fps_counter: deque = deque(maxlen=self.FPS_CALC_WINDOW)
+        self._last_fps = 0.0
 
     def start(self) -> None:
         """Start the object detection thread.
