@@ -288,4 +288,4 @@ class ObjectDetectionService:
             if time_span > 0:
                 self._last_fps = len(self._fps_counter) / time_span
             else:
-                print("Warning: Time span for FPS calculation is zero")
+                logger.warning("Warning: Time span for FPS calculation is zero")

@@ -276,7 +276,7 @@ class FrameGrabberService:
             # Read frame from grabber
             _, frame = self._frame_grabber.read()
             if frame is None:
-                print("No frame captured.")
+                logger.warning("No frame captured.")
                 continue
 
             # Frame addition control
@@ -331,7 +331,7 @@ class FrameGrabberService:
             if time_span > 0:
                 self._last_fps = len(self._fps_counter) / time_span
             else:
-                print("Warning: Time span for FPS calculation is zero")
+                logger.warning("Warning: Time span for FPS calculation is zero")
 
 
 if __name__ == "__main__":
